@@ -5,7 +5,7 @@ import cohere
 from flask import Flask, request, jsonify,render_template
 import requests
 from pymongo import MongoClient
-
+import os
 
 """ TABLA USERS"""
 from flask import Flask, jsonify
@@ -54,7 +54,7 @@ dff_users = download_collection_from_mongodb(uri, db_name, collection_name)
 
 @app.route('/chatbot', methods=['POST'])
 def chat():
-    co = cohere.Client(api_key="lOGO9JDezVva0OyZAzvPOQUjlq8fUw0nJ0WeL0fS")
+    co = cohere.Client(api_key=os.environ["COHERE_API_KEY"]) 
     question = request.form.get("chat", None)
     prompt = f"""En base al siguiente Dataframe {dff_users}, quiero que respondas a la pregunta registrada en {question}. En la respuesta, intenta ser los más conciso posible, y pon solo texto normal, nada parecido a "\n" o similar """
     response = co.generate(
