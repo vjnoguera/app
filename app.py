@@ -9,15 +9,13 @@ import os
 
 """ TABLA USERS"""
 from flask import Flask, jsonify
-from pymongo import MongoClient
+
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     return render_template('index.html')
-
-
 
 # Definir la función para descargar la colección desde MongoDB
 def download_collection_from_mongodb(uri, db_name, collection_name):
@@ -54,7 +52,8 @@ dff_users = download_collection_from_mongodb(uri, db_name, collection_name)
 
 @app.route('/chatbot', methods=['POST'])
 def chat():
-    co = cohere.Client(api_key=os.environ["COHERE_API_KEY"]) 
+    # co = cohere.Client(api_key=os.environ["COHERE_API_KEY"]) 
+    co = cohere.Client(api_key="lOGO9JDezVva0OyZAzvPOQUjlq8fUw0nJ0WeL0fS")
     question = request.form.get("chat", None)
     prompt = f"""En base al siguiente Dataframe {dff_users}, quiero que respondas a la pregunta registrada en {question}. En la respuesta, intenta ser los más conciso posible, y pon solo texto normal, nada parecido a "\n" o similar """
     response = co.generate(
@@ -68,9 +67,12 @@ def chat():
                         return_likelihoods = "NONE"
                         )
 
-    nav = response.generations[0].text
-    nav
+    # nav = response.generations[0].text
+    # nav
+    nav = response.generations[0].text.strip()
 
-    return render_template("result.html",prediction=nav)
+    # return render_template("result.html",prediction=nav)
+    return jsonify({"response": nav})
+    # return render_template({msg:"chat bot answer",answer:respuestadelchatbot})
 if __name__ == '__main__':
     app.run(debug=True)
