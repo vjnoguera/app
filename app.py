@@ -6,12 +6,14 @@ from flask import Flask, request, jsonify,render_template
 import requests
 from pymongo import MongoClient
 import os
+from flask_cors import CORS
 
 """ TABLA USERS"""
 from flask import Flask, jsonify
 
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def home():
