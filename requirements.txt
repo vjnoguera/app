@@ -4,3 +4,4 @@ pandas==2.2.2
 numpy==1.26.4
 cohere==5.5.4
 pymongo
+Flask-Cors
